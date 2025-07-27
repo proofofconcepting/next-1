@@ -1,9 +1,5 @@
 const { default: mongoose } = require("mongoose")
 
-if (typeof global === "undefined") {
-  var global = window
-}
-
 let cached = golobal?.mongoose || null
 
 if (!cached) {
