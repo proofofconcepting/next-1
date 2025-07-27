@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { assets } from "@/assets/assets";
-import Image from "next/image";
+import React, { useState, useEffect } from "react"
+import { assets } from "@/assets/assets"
+import Image from "next/image"
 
 const HeaderSlider = () => {
   const sliderData = [
@@ -28,20 +28,20 @@ const HeaderSlider = () => {
       buttonText2: "Learn More",
       imgSrc: assets.header_macbook_image,
     },
-  ];
+  ]
 
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % sliderData.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [sliderData.length]);
+      setCurrentSlide((prev) => (prev + 1) % sliderData.length)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [sliderData.length])
 
   const handleSlideChange = (index) => {
-    setCurrentSlide(index);
-  };
+    setCurrentSlide(index)
+  }
 
   return (
     <div className="overflow-hidden relative w-full">
@@ -67,7 +67,11 @@ const HeaderSlider = () => {
                 </button>
                 <button className="group flex items-center gap-2 px-6 py-2.5 font-medium">
                   {slide.buttonText2}
-                  <Image className="group-hover:translate-x-1 transition" src={assets.arrow_icon} alt="arrow_icon" />
+                  <Image
+                    className="group-hover:translate-x-1 transition"
+                    src={assets.arrow_icon}
+                    alt="arrow_icon"
+                  />
                 </button>
               </div>
             </div>
@@ -94,7 +98,7 @@ const HeaderSlider = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default HeaderSlider;
+export default HeaderSlider

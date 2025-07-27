@@ -1,9 +1,10 @@
 const { default: mongoose } = require("mongoose")
 
-let cached = golobal?.mongoose || null
+let cached = globalThis?.mongoose || null
+// let cached = null
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null }
+  cached = globalThis.mongoose = { conn: null, promise: null }
 }
 async function connDB() {
   if (cached.conn) return chached.conn
