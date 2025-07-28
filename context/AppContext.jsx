@@ -1,9 +1,9 @@
 "use client"
 import axios from "axios"
-import { productsDummyData } from "@/assets/assets"
 import { useAuth, useUser } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
 import { createContext, useContext, useEffect, useState } from "react"
+import toast from "react-hot-toast"
 
 export const AppContext = createContext()
 
@@ -24,7 +24,13 @@ export const AppContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({})
 
   const fetchProductData = async () => {
-    setProducts(productsDummyData)
+    try {
+      const { data } = await axios.get("/api/product/list")
+      if (data?.success) setProducts(data.products)
+      else toast.error(data.message)
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
 
   const fetchUserData = async () => {
@@ -43,8 +49,8 @@ export const AppContextProvider = (props) => {
       }
       const { data } = await axios.get("/api/user/data", header)
       if (data.success) {
-        setUserData(data.user)
-        setCartItems(data.user.cartItems)
+        setUserData(data?.user)
+        setCartItems(data?.user?.cartItems)
       } else {
         toast.error(data.message)
       }
@@ -55,12 +61,34 @@ export const AppContextProvider = (props) => {
 
   const addToCart = async (itemId) => {
     let cartData = structuredClone(cartItems)
-    if (cartData[itemId]) {
+    console.log(
+      `cartItems: ${JSON.stringify(cartItems)}, cartData: ${JSON.stringify(
+        cartData
+      )}`
+    )
+
+    if (cartData !== undefined && cartData[itemId]) {
       cartData[itemId] += 1
     } else {
       cartData[itemId] = 1
     }
     setCartItems(cartData)
+    toast.success("Item added to cart")
+
+    if (user) {
+      try {
+        const token = await getToken()
+        const headers = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        await axios.post("/api/cart/update", { cartData }, headers)
+        toast.success("Item added to cart.")
+      } catch (error) {
+        toast.error(error.message)
+      }
+    }
   }
 
   const updateCartQuantity = async (itemId, quantity) => {
@@ -71,6 +99,20 @@ export const AppContextProvider = (props) => {
       cartData[itemId] = quantity
     }
     setCartItems(cartData)
+    if (user) {
+      try {
+        const token = await getToken()
+        const headers = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        await axios.post("/api/cart/update", headers)
+        toast.success("Cart updated.")
+      } catch (error) {
+        toast.error(error.message)
+      }
+    }
   }
 
   const getCartCount = () => {

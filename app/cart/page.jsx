@@ -1,14 +1,26 @@
-'use client'
-import React from "react";
-import { assets } from "@/assets/assets";
-import OrderSummary from "@/components/OrderSummary";
-import Image from "next/image";
-import Navbar from "@/components/Navbar";
-import { useAppContext } from "@/context/AppContext";
+"use client"
+import React from "react"
+import { assets } from "@/assets/assets"
+import OrderSummary from "@/components/OrderSummary"
+import Image from "next/image"
+import Navbar from "@/components/Navbar"
+import { useAppContext } from "@/context/AppContext"
+import toast from "react-hot-toast"
 
 const Cart = () => {
+  const {
+    products,
+    router,
+    cartItems,
+    addToCart,
+    updateCartQuantity,
+    getCartCount,
+  } = useAppContext()
 
-  const { products, router, cartItems, addToCart, updateCartQuantity, getCartCount } = useAppContext();
+  // TODO: Remove after test
+  // globalThis.alert(`products: ${JSON.stringify(products)}`)
+  console.log(`products: ${JSON.stringify(products)}`)
+  toast.success(`products: ${JSON.stringify(products)}`)
 
   return (
     <>
@@ -19,7 +31,9 @@ const Cart = () => {
             <p className="text-2xl md:text-3xl text-gray-500">
               Your <span className="font-medium text-orange-600">Cart</span>
             </p>
-            <p className="text-lg md:text-xl text-gray-500/80">{getCartCount()} Items</p>
+            <p className="text-lg md:text-xl text-gray-500/80">
+              {getCartCount()} Items
+            </p>
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full table-auto">
@@ -41,9 +55,12 @@ const Cart = () => {
               </thead>
               <tbody>
                 {Object.keys(cartItems).map((itemId) => {
-                  const product = products.find(product => product._id === itemId);
+                  const product = products.find(
+                    (product) => product._id === itemId
+                  )
+                  console.log(`PRODUCT ID IN L-60: ${JSON.stringify(product)}`)
 
-                  if (!product || cartItems[itemId] <= 0) return null;
+                  if (!product || cartItems[itemId] <= 0) return null
 
                   return (
                     <tr key={itemId}>
@@ -75,18 +92,44 @@ const Cart = () => {
                           </button>
                         </div>
                       </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">${product.offerPrice}</td>
+                      <td className="py-4 md:px-4 px-1 text-gray-600">
+                        ${product.offerPrice}
+                      </td>
                       <td className="py-4 md:px-4 px-1">
                         <div className="flex items-center md:gap-2 gap-1">
-                          <button onClick={() => updateCartQuantity(product._id, cartItems[itemId] - 1)}>
+                          <button
+                            onClick={() =>
+                              updateCartQuantity(
+                                product._id,
+                                cartItems[itemId] - 1
+                              )
+                            }
+                          >
                             <Image
                               src={assets.decrease_arrow}
                               alt="decrease_arrow"
                               className="w-4 h-4"
                             />
                           </button>
-                          <input onChange={e => updateCartQuantity(product._id, Number(e.target.value))} type="number" value={cartItems[itemId]} className="w-8 border text-center appearance-none"></input>
-                          <button onClick={() => addToCart(product._id)}>
+                          <input
+                            onChange={(e) =>
+                              updateCartQuantity(
+                                product._id,
+                                Number(e.target.value)
+                              )
+                            }
+                            type="number"
+                            value={cartItems[itemId]}
+                            className="w-8 border text-center appearance-none"
+                          ></input>
+                          <button
+                            onClick={() => {
+                              alert(
+                                `cart > page.jsx > product._id: ${product._id}`
+                              )
+                              addToCart(product._id)
+                            }}
+                          >
                             <Image
                               src={assets.increase_arrow}
                               alt="increase_arrow"
@@ -95,14 +138,19 @@ const Cart = () => {
                           </button>
                         </div>
                       </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">${(product.offerPrice * cartItems[itemId]).toFixed(2)}</td>
+                      <td className="py-4 md:px-4 px-1 text-gray-600">
+                        ${(product.offerPrice * cartItems[itemId]).toFixed(2)}
+                      </td>
                     </tr>
-                  );
+                  )
                 })}
               </tbody>
             </table>
           </div>
-          <button onClick={()=> router.push('/all-products')} className="group flex items-center mt-6 gap-2 text-orange-600">
+          <button
+            onClick={() => router.push("/all-products")}
+            className="group flex items-center mt-6 gap-2 text-orange-600"
+          >
             <Image
               className="group-hover:-translate-x-1 transition"
               src={assets.arrow_right_icon_colored}
@@ -114,7 +162,7 @@ const Cart = () => {
         <OrderSummary />
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Cart;
+export default Cart

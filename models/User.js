@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose"
+import mongoose from "mongoose"
 // import { unique } from "next/dist/build/utils"
 
 const userSchema = new mongoose.Schema(
@@ -12,6 +12,6 @@ const userSchema = new mongoose.Schema(
   { minimize: false }
 )
 
-const User = mongoose.models.user || mongoose.model("use", userSchema)
+const User = mongoose.models.user || mongoose.model("user", userSchema)
 
 export default User

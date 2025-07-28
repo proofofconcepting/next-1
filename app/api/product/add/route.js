@@ -25,7 +25,7 @@ export async function POST(req) {
     const price = formData.get("price")
     const offerPrice = formData.get("offerPrice")
     const files = formData.getAll("images")
-    if (!file || files.length === 0)
+    if (!files || files.length === 0)
       return NextResponse.json({
         success: false,
         message: "No files uploaded.",
@@ -46,7 +46,12 @@ export async function POST(req) {
         })
       })
     )
-    const image = res.map((res) => res.secure_url)
+    const image = result.map((result) => result.secure_url)
+    if (!image) {
+      console.log("no image! >>>>>>>>")
+      return
+    } else console.log(image)
+
     await connDB()
     const newProduct = await Product.create({
       userId,
@@ -58,5 +63,15 @@ export async function POST(req) {
       image,
       date: Date.now(),
     })
-  } catch (error) {}
+    return NextResponse.json({
+      success: true,
+      message: "Upload succeeded.",
+      newProduct,
+    })
+  } catch (error) {
+    return NextResponse.json({
+      success: false,
+      message: `Your error msg: ${error.message}`,
+    })
+  }
 }

@@ -7,8 +7,8 @@ if (!cached) {
   cached = globalThis.mongoose = { conn: null, promise: null }
 }
 async function connDB() {
-  if (cached.conn) return chached.conn
-  if (!cached.promise) {
+  if (cached?.conn) return cached.conn
+  if (!cached?.promise) {
     const opts = {
       bufferCommands: false,
     }
