@@ -7,6 +7,7 @@ export async function POST(req) {
   try {
     const { userId } = getAuth(req)
     const { address } = await req.json()
+
     await connDB()
     const newAddress = await Address.create({ ...address, userId })
     return NextResponse.json({
