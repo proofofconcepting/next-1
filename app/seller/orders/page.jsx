@@ -6,6 +6,7 @@ import { useAppContext } from "@/context/AppContext"
 import Footer from "@/components/seller/Footer"
 import Loading from "@/components/Loading"
 import axios from "axios"
+import toast from "react-hot-toast"
 
 const Orders = () => {
   const { currency, getToken, user } = useAppContext()
@@ -21,7 +22,7 @@ const Orders = () => {
           Authorization: `Bearer ${token}`,
         },
       }
-      const { data } = await axios.get("/api/order/seller-orders", headers)
+      const { data } = await axios.get("/api/order/seller-order", headers)
       if (data?.success) {
         setOrders(data.orders)
         setLoading(false)

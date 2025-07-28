@@ -1,7 +1,6 @@
 const { default: mongoose } = require("mongoose")
 
 let cached = globalThis?.mongoose || null
-// let cached = null
 
 if (!cached) {
   cached = globalThis.mongoose = { conn: null, promise: null }
