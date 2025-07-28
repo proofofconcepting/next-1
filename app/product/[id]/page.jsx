@@ -126,9 +126,6 @@ const Product = () => {
             <div className="flex items-center mt-10 gap-4">
               <button
                 onClick={() => {
-                  alert(
-                    `app > product > page.jsx > product._id: ${product._id}`
-                  )
                   addToCart(productData._id)
                 }}
                 className="w-full py-3.5 bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition"
@@ -137,9 +134,6 @@ const Product = () => {
               </button>
               <button
                 onClick={() => {
-                  alert(
-                    `app > product > page.jsx > product._id: ${product._id}`
-                  )
                   addToCart(productData._id)
                   router.push("/cart")
                 }}

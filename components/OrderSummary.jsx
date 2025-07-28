@@ -2,6 +2,7 @@
 import { useAppContext } from "@/context/AppContext"
 import React, { useEffect, useState } from "react"
 import toast from "react-hot-toast"
+import axios from "axios"
 
 const OrderSummary = () => {
   const {
@@ -20,7 +21,6 @@ const OrderSummary = () => {
   const [userAddresses, setUserAddresses] = useState([])
 
   const fetchUserAddresses = async () => {
-    // setUserAddresses(addressDummyData);
     try {
       const token = await getToken()
       const headers = {
@@ -33,12 +33,16 @@ const OrderSummary = () => {
         setUserAddresses(data.addresses)
         if (data.addresses.length > 0) {
           setSelectedAddress(data.addresses[0])
-        } else toast.error(data.message)
+        } else toast.error("Please provide an address!")
       }
     } catch (error) {
       toast.error(error.message)
     }
   }
+
+  useEffect(() => {
+    if (user) fetchUserAddresses()
+  }, [user])
 
   const handleAddressSelect = (address) => {
     setSelectedAddress(address)
@@ -47,20 +51,30 @@ const OrderSummary = () => {
 
   const createOrder = async () => {
     try {
-      if (!selectedAddress) toast.error("Please select an address.")
+      if (!selectedAddress) {
+        toast.error("Please select an address.")
+        return
+      }
       let cartItemsArray = Object.keys(cartItems).map((key) => ({
         product: key,
         quantity: cartItems[key],
       }))
       cartItemsArray = cartItemsArray.filter((item) => item.quantity > 0)
-      if (cartItemsArray.length === 0) toast.error("Cart is empty")
+      if (cartItemsArray.length <= 0) {
+        toast.error("Cart is empty")
+        return
+      }
       const token = await getToken()
       const headers = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
-      const { data } = await axios.post("/api/order/create", headers)
+      const { data } = await axios.post(
+        "/api/order/create",
+        { address: selectedAddress, items: cartItemsArray },
+        headers
+      )
       if (data?.success) {
         toast.success(data.message)
         setCartItems({})
@@ -72,10 +86,6 @@ const OrderSummary = () => {
       toast.error(error.message)
     }
   }
-
-  useEffect(() => {
-    if (user) fetchUserAddresses()
-  }, [user])
 
   return (
     <div className="w-full md:w-96 bg-gray-500/5 p-5">

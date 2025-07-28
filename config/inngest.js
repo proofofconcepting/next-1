@@ -67,8 +67,10 @@ export const createUserOrder = inngest.createFunction(
         date: event.data.date,
       }
     })
+
     await connDB()
     await Order.insertMany(orders)
+
     return { success: true, processed: orders.length }
   }
 )

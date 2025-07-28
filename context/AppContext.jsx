@@ -37,9 +37,7 @@ export const AppContextProvider = (props) => {
     try {
       if (user?.publicMetadata?.role === "seller") {
         setIsSeller(true)
-        console.log(JSON.stringify(user) + " is a SELLER!")
       } else {
-        console.log(JSON.stringify(user) + " is 'NOT' a SELLER!")
       }
       const token = await getToken()
       const header = {
@@ -50,23 +48,18 @@ export const AppContextProvider = (props) => {
       const { data } = await axios.get("/api/user/data", header)
       if (data.success) {
         setUserData(data?.user)
-        setCartItems(data?.user?.cartItems)
+        data?.user?.cartItems
+          ? setCartItems(data?.user?.cartItems)
+          : setCartItems({})
       } else {
         toast.error(data.message)
       }
     } catch (error) {
-      console.log(error)
+      toast.error(error.message)
     }
   }
-
   const addToCart = async (itemId) => {
     let cartData = structuredClone(cartItems)
-    console.log(
-      `cartItems: ${JSON.stringify(cartItems)}, cartData: ${JSON.stringify(
-        cartData
-      )}`
-    )
-
     if (cartData !== undefined && cartData[itemId]) {
       cartData[itemId] += 1
     } else {

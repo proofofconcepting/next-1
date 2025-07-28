@@ -3,8 +3,8 @@ import mongoose from "mongoose"
 const addressSchema = new mongoose.Schema({
   userId: { type: String, required: true, ref: "user" },
   fullName: { type: String, required: true },
-  PhoneNumber: { type: String, required: true },
-  pinCode: { type: Number, required: true },
+  PhoneNumber: { type: String, required: true, default: "+1 (111) 111-11-11" },
+  pinCode: { type: Number, required: true, default: 111 },
   area: { type: String, required: true },
   city: { type: String, required: true },
   state: { type: String, required: true },

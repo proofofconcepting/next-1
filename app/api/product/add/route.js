@@ -48,9 +48,8 @@ export async function POST(req) {
     )
     const image = result.map((result) => result.secure_url)
     if (!image) {
-      console.log("no image! >>>>>>>>")
       return
-    } else console.log(image)
+    }
 
     await connDB()
     const newProduct = await Product.create({

@@ -5,7 +5,6 @@ import OrderSummary from "@/components/OrderSummary"
 import Image from "next/image"
 import Navbar from "@/components/Navbar"
 import { useAppContext } from "@/context/AppContext"
-import toast from "react-hot-toast"
 
 const Cart = () => {
   const {
@@ -16,12 +15,6 @@ const Cart = () => {
     updateCartQuantity,
     getCartCount,
   } = useAppContext()
-
-  // TODO: Remove after test
-  // globalThis.alert(`products: ${JSON.stringify(products)}`)
-  console.log(`products: ${JSON.stringify(products)}`)
-  toast.success(`products: ${JSON.stringify(products)}`)
-
   return (
     <>
       <Navbar />
@@ -58,9 +51,13 @@ const Cart = () => {
                   const product = products.find(
                     (product) => product._id === itemId
                   )
-                  console.log(`PRODUCT ID IN L-60: ${JSON.stringify(product)}`)
-
-                  if (!product || cartItems[itemId] <= 0) return null
+                  if (
+                    !product ||
+                    !cartItems ||
+                    Object.keys(cartItems).length <= 0 ||
+                    cartItems[itemId] <= 0
+                  )
+                    return null
 
                   return (
                     <tr key={itemId}>
@@ -124,9 +121,6 @@ const Cart = () => {
                           ></input>
                           <button
                             onClick={() => {
-                              alert(
-                                `cart > page.jsx > product._id: ${product._id}`
-                              )
                               addToCart(product._id)
                             }}
                           >

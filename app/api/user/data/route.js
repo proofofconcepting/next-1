@@ -7,10 +7,6 @@ import { NextResponse } from "next/server"
 export async function GET(req) {
   try {
     const { userId } = getAuth(req)
-    // alert(`api > user > data > route.js > user id from getAuth: ${userId}`)
-    console.log(
-      `api > user > data > route.js > user id from getAuth: ${userId}`
-    )
 
     await connDB()
     const user = await User.findById(userId)
