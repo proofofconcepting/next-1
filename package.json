@@ -3,16 +3,20 @@
   "version": "0.666.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
+    "devt": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.27.1",
+    "axios": "^1.11.0",
+    "cloudinary": "^2.7.0",
     "inngest": "^3.40.1",
     "mongoose": "^8.16.5",
     "next": "15.1.6",
+    "next-cloudinary": "^6.16.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.1"
